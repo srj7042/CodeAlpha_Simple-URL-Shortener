@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart URL Shortener</title>
+
+<style>
+
+body{
+font-family: Arial, Helvetica, sans-serif;
+background: linear-gradient(135deg,#748cf6,#c088f8);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+margin:0;
+}
+
+.container{
+background:white;
+padding:40px;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+width:400px;
+text-align:center;
+}
+
+h1{
+margin-bottom:20px;
+color:#333;
+}
+
+input{
+width:90%;
+padding:12px;
+border-radius:8px;
+border:1px solid #ccc;
+margin-bottom:15px;
+font-size:15px;
+}
+
+button{
+background:#667eea;
+color:white;
+border:none;
+padding:12px 20px;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+}
+
+button:hover{
+background:#4a56bb;
+}
+
+.result-box{
+margin-top:20px;
+background:#f4f4f4;
+padding:15px;
+border-radius:10px;
+display:none;
+}
+
+.copy-btn{
+margin-top:10px;
+background:#28a745;
+}
+
+.copy-btn:hover{
+background:#218838;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1> URL Shortener</h1>
+
+<input id="url" placeholder="Paste your long URL here">
+
+<br>
+
+<button onclick="shorten()">Shorten URL</button>
+
+<div id="resultBox" class="result-box">
+
+<p><b>Short URL:</b></p>
+
+<a id="shortUrl" target="_blank"></a>
+
+<br>
+
+<button class="copy-btn" onclick="copyUrl()">Copy Link</button>
+
+</div>
+
+</div>
+
+<script>
+
+async function shorten(){
+
+let url = document.getElementById("url").value
+
+let response = await fetch("/shorten",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({url:url})
+})
+
+let data = await response.json()
+
+document.getElementById("resultBox").style.display="block"
+
+let shortLink = document.getElementById("shortUrl")
+
+shortLink.href = data.short_url
+shortLink.innerHTML = data.short_url
+
+}
+
+function copyUrl(){
+
+let text = document.getElementById("shortUrl").innerText
+
+navigator.clipboard.writeText(text)
+
+alert("Copied to clipboard!")
+
+}
+
+</script>
+
+</body>
+</html>
